@@ -1,4 +1,4 @@
 [submodule "secure-rewind-and-discard"]
 	path = secure-rewind-and-discard
-	url = git@github.com:EricssonResearch/secure-rewind-and-discard.git
+	url = https://github.com/secure-rewind-and-discard/secure-rewind-and-discard.git
 	branch = sdrad_ffi
