@@ -2,11 +2,18 @@
 
 This repository contains the source code for the paper [Friend or Foe Inside? Exploring In-Process Isolation to Maintain Memory Safety for Unsafe Rust](https://arxiv.org/pdf/2306.08127.pdf)
 
-Accepted at [IEEE-SECDEV 2023](https://secdev.ieee.org/2023/home). 
+Published at [IEEE-SECDEV 2023](https://secdev.ieee.org/2023/home). 
 
 ## Abstract
 
 Rust is a popular memory-safe systems programming language. In order to interact with hardware or call into non- Rust libraries, Rust provides unsafe language features that shift responsibility for ensuring memory safety to the developer. Failing to do so, may lead to memory safety violations in unsafe code which can violate safety of the entire application. In this work we explore in-process isolation with Memory Protection Keys as a mechanism to shield safe program sections from safety violations that may happen in unsafe sections. Our approach is easy to use and comprehensive as it prevents heap and stack-based violations. We further compare process-based and in-process isolation mechanisms and the necessary requirements for data serialization, communication, and context switching. Our results show that in-process isolation can be effective and efficient, permits for a high degree of automation, and also enables a notion of application rewinding where the safe program section may detect and safely handle violations in unsafe code.
+## Requirements 
+Install Cargo
+```
+sudo apt install cargo 
+```
+Additionally, you'll need to install rustup with the nightly release. Some features used in this project are only available with the `nightly` release. You can install rustup from https://rustup.rs/
+
 
 ## How to get started
 
@@ -14,6 +21,8 @@ This repository can be cloned using the following commands:
 ```
 git clone --recursive https://github.com/EricssonResearch/sdradrustffi.git
 ```
+Note that sdrad library should be in the `sdrad_ffi` branch 
+
 SDRaD-FFI accommodates various serialization crates required for different purposes, including:
 
 - abomonation_v1: original version for [abomonation](git@github.com:TimelyDataflow/abomonation.git)
@@ -23,6 +32,7 @@ SDRaD-FFI accommodates various serialization crates required for different purpo
 
 
 To compile SDRaD-FFI, run `cargo build` with selected features 
+
 
 ```
 cargo build --features "abomonation_v1"
