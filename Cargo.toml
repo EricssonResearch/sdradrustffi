@@ -15,7 +15,7 @@ paste = "*"
 bincode_v1 = { package = "bincode", version = "1.3.2" , optional = true}
 bincode_v2 = { package = "bincode", version = "=2.0.0-rc.3", features = ["serde"], optional = true }
 
-abomonation_v1 = {package = "abomonation", optional = true }
+abomonation_v1 = {package = "abomonation", git = "https://github.com/TimelyDataflow/abomonation.git", optional = true }
 abomonation_v2 = {git = "https://github.com/secure-rewind-and-discard/abomonation.git", package = "abomonation", optional = true }
 
 
