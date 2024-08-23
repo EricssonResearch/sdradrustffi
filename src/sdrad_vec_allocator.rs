@@ -12,11 +12,11 @@ use libc::c_void;
 
 use crate::sdrad_api_import::*;
 
-pub struct SdrobAllocator {
+pub struct SdradAllocator {
     pub data_domain_id: u64,
 }
 
-unsafe impl Allocator for SdrobAllocator {
+unsafe impl Allocator for SdradAllocator {
     fn allocate(&self, layout: Layout) -> Result<NonNull<[u8]>, AllocError> {
         match layout.size() {
             0 => Ok(NonNull::slice_from_raw_parts(layout.dangling(), 0)),
@@ -57,11 +57,11 @@ unsafe impl Allocator for SdrobAllocator {
     }
 }
 
-pub struct SdrobAllocatorFake {
+pub struct SdradAllocatorFake {
     pub data_domain_id: u64,
 }
 
-unsafe impl Allocator for SdrobAllocatorFake {
+unsafe impl Allocator for SdradAllocatorFake {
     fn allocate(&self, layout: Layout) -> Result<NonNull<[u8]>, AllocError> {
         match layout.size() {
             0 => Ok(NonNull::slice_from_raw_parts(layout.dangling(), 0)),

@@ -289,7 +289,7 @@ macro_rules! sdrad_collect_ret_try {
 		let ret_address =  sr.retrieve::<i64>();
 		let ret_address_ptr = ret_address as *mut i64;
 		let mut rebuilt = Vec::from_raw_parts_in(ret_address_ptr as *mut u8, ret_len as usize, ret_cap as usize,
-												SdrobAllocator{ data_domain_id: $udi} );
+												SdradAllocator{ data_domain_id: $udi} );
 		let mut bytes = &mut rebuilt;
 		sdrad_restore_changed_vars_global!(bytes, $($x)*);
 		let (a, r) = decode::<$rettype>(bytes).unwrap();
@@ -309,7 +309,7 @@ macro_rules! sdrad_collect_ret_try {
 #[cfg(any(feature = "abomonation_v1", feature = "abomonation_v2"))]
 macro_rules! sdrad_push_args {
 	($udi:expr, $buf_ptr:ident, fn $f:ident($($x:tt)+)) => {{
-		let mut vec = Vec::new_in(SdrobAllocatorFake{ data_domain_id: $udi});
+		let mut vec = Vec::new_in(SdradAllocatorFake{ data_domain_id: $udi});
 		sdrad_push_function_args!(vec, $($x)*);
 		let rsp :i64 = sdrad_get_stack_offset($udi);
 		$buf_ptr = rsp as *mut i64;
@@ -329,7 +329,7 @@ macro_rules! sdrad_push_args {
 macro_rules! sdrad_run_function {
 	($udi:expr, $rsp_ptr:expr, fn $f:ident() -> $rettype:ty)  => {
 		let retval : $rettype = paste!{sdrad_strip_types!([<__real_$f>]())};
-		let mut vec = Vec::new_in(SdrobAllocatorFake { data_domain_id: $udi});
+		let mut vec = Vec::new_in(SdradAllocatorFake { data_domain_id: $udi});
 		encode(&retval, &mut vec);
 		let mut sw = StackBufWriter::new($rsp_ptr as *mut c_void).unwrap();
 		sw.put(vec.capacity() as i64);
@@ -340,7 +340,7 @@ macro_rules! sdrad_run_function {
 	// ret value
 	($udi:expr, $rsp_ptr:expr, fn $f:ident($($x:tt)*) -> $rettype:ty)  => {
 		let retval : $rettype = paste!{sdrad_strip_types!([<__real_$f>]($($x)*))};
-		let mut vec = Vec::new_in(SdrobAllocatorFake { data_domain_id: $udi});
+		let mut vec = Vec::new_in(SdradAllocatorFake { data_domain_id: $udi});
 		encode(&retval, &mut vec);
 		sdrad_store_changed_vars_global!(&mut vec, $($x)*);
 		let mut sw = StackBufWriter::new($rsp_ptr as *mut c_void).unwrap();
@@ -351,7 +351,7 @@ macro_rules! sdrad_run_function {
 	// no ret value
 	($udi:expr, $rsp_ptr:expr, fn $f:ident($($x:tt)*))  => {
 		paste!{sdrad_strip_types!([<__real_$f>]($($x)*))};
-		let mut vec = Vec::new_in(SdrobAllocatorFake { data_domain_id: $udi});
+		let mut vec = Vec::new_in(SdradAllocatorFake { data_domain_id: $udi});
 		vec.push(1); // todo
 		sdrad_store_changed_vars_global!(&mut vec, $($x)*);
 		if vec.capacity() > 0 {
@@ -390,7 +390,7 @@ macro_rules! sdrad_pull_args_run {
 		let len = sr.retrieve::<i64>();
 		let address =  sr.retrieve::<i64>();
 		let address_ptr = address as *mut i64;
-		let mut rebuilt = Vec::from_raw_parts_in(address_ptr as *mut u8, len as usize, capacity as usize, SdrobAllocator { data_domain_id: $udi} );
+		let mut rebuilt = Vec::from_raw_parts_in(address_ptr as *mut u8, len as usize, capacity as usize, SdradAllocator { data_domain_id: $udi} );
 		let mut bytes = &mut rebuilt;
 		sdrad_pull_function_args!(bytes, $($x)*);
 		sdrad_run_function!($udi, rsp_ptr, fn $f($($x)*) $(->$rettype)? );
